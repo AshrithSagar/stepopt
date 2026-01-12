@@ -1,4 +1,4 @@
-# cmo-py
+# stepopt
 
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -12,8 +12,8 @@ Optimisation algorithm implementations in Python
 <summary>Clone the repository</summary>
 
 ```shell
-git clone https://github.com/AshrithSagar/E0230-CMO-2025.git
-cd E0230-CMO-2025
+git clone https://github.com/AshrithSagar/stepopt.git
+cd stepopt
 ```
 
 </details>
@@ -56,4 +56,4 @@ pip3 install -e .
 
 ## License
 
-This project falls under the [MIT License](../../LICENSE).
+This project falls under the [MIT License](LICENSE).
