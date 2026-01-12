@@ -2,7 +2,7 @@
 tests/array/test_pyndarray.py
 """
 
-from cmo.array.python import PyNDArray
+from stepopt.array.python import PyNDArray
 
 
 def test1() -> None:

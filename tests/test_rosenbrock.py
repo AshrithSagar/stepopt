@@ -3,23 +3,23 @@ tests/test_rosenbrock.py
 """
 
 import numpy as np
-from cmo.core.base import IterativeOptimiser
-from cmo.core.oracle import FirstOrderOracle, Oracle, SecondOrderOracle
-from cmo.core.stopping import (
+from stepopt.core.base import IterativeOptimiser
+from stepopt.core.oracle import FirstOrderOracle, Oracle, SecondOrderOracle
+from stepopt.core.stopping import (
     GradientNormCriterion,
     MaxIterationsCriterion,
     StoppingCriterionType,
 )
-from cmo.functions import Rosenbrock
-from cmo.types import Vector
-from cmo.unconstrained import (
+from stepopt.functions import Rosenbrock
+from stepopt.types import Vector
+from stepopt.unconstrained import (
     BFGSUpdate,
     DFPUpdate,
     GradientDescent,
     NewtonMethod,
     SR1Update,
 )
-from cmo.utils.logging import Logger
+from stepopt.utils.logging import Logger
 
 Logger.configure(level="INFO")
 

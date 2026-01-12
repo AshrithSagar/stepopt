@@ -3,14 +3,14 @@ tests/test_active_set.py
 """
 
 import numpy as np
-from cmo.constrained.constraint import LinearInequalityConstraintSet
-from cmo.constrained.optimisers import ActiveSetMethod
-from cmo.core.oracle import FirstOrderOracle
-from cmo.core.stopping import MaxIterationsCriterion
-from cmo.functions import ConvexQuadratic
-from cmo.problems import InequalityConstrainedQuadraticProgram
-from cmo.types import Matrix, Vector
-from cmo.utils.logging import Logger, console
+from stepopt.constrained.constraint import LinearInequalityConstraintSet
+from stepopt.constrained.optimisers import ActiveSetMethod
+from stepopt.core.oracle import FirstOrderOracle
+from stepopt.core.stopping import MaxIterationsCriterion
+from stepopt.functions import ConvexQuadratic
+from stepopt.problems import InequalityConstrainedQuadraticProgram
+from stepopt.types import Matrix, Vector
+from stepopt.utils.logging import Logger, console
 
 Logger.configure(level="DEBUG")
 
