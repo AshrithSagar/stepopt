@@ -13,6 +13,7 @@ from enum import Enum, auto
 from typing import Any, Callable, Literal, Optional, Sequence
 
 import numpy as np
+
 from stepopt.types import Matrix, Scalar, Vector
 
 

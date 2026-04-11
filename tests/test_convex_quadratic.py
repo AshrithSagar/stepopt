@@ -3,6 +3,7 @@ tests/test_convex_quadratic.py
 """
 
 import numpy as np
+
 from stepopt.core.oracle import FirstOrderOracle
 from stepopt.core.stopping import (
     GradientNormCriterion,

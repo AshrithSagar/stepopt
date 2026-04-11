@@ -3,6 +3,7 @@ tests/test_rosenbrock.py
 """
 
 import numpy as np
+
 from stepopt.core.base import IterativeOptimiser
 from stepopt.core.oracle import FirstOrderOracle, Oracle, SecondOrderOracle
 from stepopt.core.stopping import (

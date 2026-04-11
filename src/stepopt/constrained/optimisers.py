@@ -8,6 +8,7 @@ from abc import ABC
 from typing import Any
 
 import numpy as np
+
 from stepopt.constrained.constraint import LinearEqualityConstraintSet
 from stepopt.core.base import FirstOrderLineSearchOptimiser, IterativeOptimiser
 from stepopt.core.info import ActiveSetStepInfo, StepInfo

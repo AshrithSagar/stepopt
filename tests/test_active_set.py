@@ -3,6 +3,7 @@ tests/test_active_set.py
 """
 
 import numpy as np
+
 from stepopt.constrained.constraint import LinearInequalityConstraintSet
 from stepopt.constrained.optimisers import ActiveSetMethod
 from stepopt.core.oracle import FirstOrderOracle
