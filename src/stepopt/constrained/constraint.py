@@ -11,7 +11,7 @@ References
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from enum import Enum, auto
-from typing import Any, Callable, Literal
+from typing import Any, Callable, Literal, override
 
 import numpy as np
 
@@ -80,14 +80,17 @@ class AbstractConstraint[C: ConstraintType](ABC):
 class SingleConstraint[C: ConstraintType](AbstractConstraint[C], ABC):
     """A class representing a single constraint."""
 
+    @override
     @abstractmethod
     def residual(self, x: Vector) -> Scalar:
         raise NotImplementedError
 
+    @override
     @abstractmethod
     def project(self, x: Vector) -> Vector:
         raise NotImplementedError
 
+    @override
     def is_satisfied(self, x: Vector) -> bool:
         return self.ctype.op(self.residual(x), 0)
 
@@ -105,14 +108,17 @@ class MultiConstraint[C: ConstraintType](AbstractConstraint[C], ABC):
     constraints: Sequence[SingleConstraint[C]]
     """The sequence of constraints."""
 
+    @override
     @abstractmethod
     def residual(self, x: Vector) -> Vector:
         raise NotImplementedError
 
+    @override
     @abstractmethod
     def project(self, x: Vector) -> Vector:
         raise NotImplementedError
 
+    @override
     def is_satisfied(self, x: Vector) -> bool:
         residual = self.residual(x)
         return self.ctype.op(residual, np.zeros_like(residual))
@@ -132,14 +138,17 @@ class LowerBoundConstraint(
     ctype = ConstraintType.GREATER_THAN_OR_EQUAL_TO
 
     def __init__(self, lb: Vector) -> None:
-        self.lb = Vector(lb)
+        self.lb: Vector = Vector(lb)
 
+    @override
     def residual(self, x: Vector) -> Vector:
         return Vector(x - self.lb)
 
+    @override
     def project(self, x: Vector) -> Vector:
         return Vector(np.maximum(x, self.lb))
 
+    @override
     def is_satisfied(self, x: Vector) -> bool:
         return bool(np.all(x >= self.lb))
 
@@ -152,14 +161,17 @@ class UpperBoundConstraint(
     ctype = ConstraintType.LESS_THAN_OR_EQUAL_TO
 
     def __init__(self, ub: Vector) -> None:
-        self.ub = Vector(ub)
+        self.ub: Vector = Vector(ub)
 
+    @override
     def residual(self, x: Vector) -> Vector:
         return Vector(x - self.ub)
 
+    @override
     def project(self, x: Vector) -> Vector:
         return Vector(np.minimum(x, self.ub))
 
+    @override
     def is_satisfied(self, x: Vector) -> bool:
         return bool(np.all(x <= self.ub))
 
@@ -168,9 +180,10 @@ class LinearConstraint[C: ConstraintType](SingleConstraint[C]):
     """A single linear constraint with residual `(a^T x - b)`."""
 
     def __init__(self, a: Vector, b: Scalar) -> None:
-        self.a = Vector(a)
-        self.b = Scalar(b)
+        self.a: Vector = Vector(a)
+        self.b: Scalar = Scalar(b)
 
+    @override
     def residual(self, x: Vector) -> Scalar:
         return Scalar(self.a @ x) - self.b
 
@@ -180,6 +193,7 @@ class LinearConstraint[C: ConstraintType](SingleConstraint[C]):
         residual = self.residual(x)
         return Vector(x - (residual / np.dot(a, a)) * a)
 
+    @override
     def project(self, x: Vector) -> Vector:
         return x if self.is_satisfied(x) else self._project(x)
 
@@ -197,6 +211,7 @@ class LinearEqualityConstraint(LinearConstraint[Literal[ConstraintType.EQUALITY]
 
     ctype = ConstraintType.EQUALITY
 
+    @override
     def project(self, x: Vector) -> Vector:
         return self._project(x)
 
@@ -207,8 +222,8 @@ class LinearConstraintSet[C: ConstraintType](MultiConstraint[C]):
     constraint: type[LinearConstraint[C]]
 
     def __init__(self, A: Matrix, b: Vector) -> None:
-        self.A = Matrix(A)
-        self.b = Vector(b)
+        self.A: Matrix = Matrix(A)
+        self.b: Vector = Vector(b)
         assert self.A.shape[0] == self.b.shape[0], (
             "Incompatible dimensions between A and b."
         )
@@ -218,9 +233,11 @@ class LinearConstraintSet[C: ConstraintType](MultiConstraint[C]):
             for a_i, b_i in zip(self.A, self.b)
         ]
 
+    @override
     def residual(self, x: Vector) -> Vector:
         return Vector(self.A @ x - self.b)
 
+    @override
     def project(self, x: Vector) -> Vector:
         x_proj = x.copy()
         for constraint in self.constraints:
@@ -249,6 +266,7 @@ class LinearEqualityConstraintSet(
         super().__init__(A, b)
         self._AT_AAT_pinv: Matrix | None = None
 
+    @override
     def project(self, x: Vector) -> Vector:
         residual = self.residual(x)
         x_proj = Vector(x - self.AT_AAT_pinv @ residual)

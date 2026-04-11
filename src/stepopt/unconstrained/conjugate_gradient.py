@@ -4,7 +4,7 @@ Conjugate Gradient methods
 src/stepopt/unconstrained/conjugate_gradient.py
 """
 
-from typing import Any, Self
+from typing import Any, Self, override
 
 from stepopt.core.base import ExactLineSearchMixin, FirstOrderLineSearchOptimiser
 from stepopt.core.info import FirstOrderLineSearchStepInfo
@@ -34,10 +34,12 @@ class ConjugateDirectionMethod(
             FirstOrderLineSearchStepInfo[FirstOrderOracle[ConvexQuadratic]]
         ]()
 
+    @override
     def reset(self) -> Self:
         self.line_search.reset()
         return super().reset()
 
+    @override
     def direction(
         self, info: FirstOrderLineSearchStepInfo[FirstOrderOracle[ConvexQuadratic]]
     ) -> Vector:
@@ -49,6 +51,7 @@ class ConjugateDirectionMethod(
         else:
             raise IndexError(f"No more directions available for iteration {k}.")
 
+    @override
     def step_length(
         self, info: FirstOrderLineSearchStepInfo[FirstOrderOracle[ConvexQuadratic]]
     ) -> Scalar:
@@ -82,10 +85,12 @@ class ConjugateGradientMethod(
             FirstOrderLineSearchStepInfo[FirstOrderOracle[ConvexQuadratic]]
         ]()
 
+    @override
     def reset(self) -> Self:
         self.line_search.reset()
         return super().reset()
 
+    @override
     def direction(
         self, info: FirstOrderLineSearchStepInfo[FirstOrderOracle[ConvexQuadratic]]
     ) -> Vector:
@@ -109,6 +114,7 @@ class ConjugateGradientMethod(
         self.line_search.step_directions.append(direction)
         return direction
 
+    @override
     def step_length(
         self, info: FirstOrderLineSearchStepInfo[FirstOrderOracle[ConvexQuadratic]]
     ) -> Scalar:

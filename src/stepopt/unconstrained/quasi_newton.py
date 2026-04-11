@@ -4,6 +4,8 @@ Newton and Quasi-Newton methods
 src/stepopt/unconstrained/quasi_newton.py
 """
 
+from typing import override
+
 import numpy as np
 
 from stepopt.core.base import (
@@ -50,6 +52,7 @@ class SR1Update(
 
     StepInfoClass = QuasiNewtonStepInfo[FirstOrderOracle[FirstOrderFunctionProto]]
 
+    @override
     def hess_inv(
         self, info: QuasiNewtonStepInfo[FirstOrderOracle[FirstOrderFunctionProto]]
     ) -> Matrix:
@@ -76,6 +79,7 @@ class DFPUpdate(
 
     StepInfoClass = QuasiNewtonStepInfo[FirstOrderOracle[FirstOrderFunctionProto]]
 
+    @override
     def hess_inv(
         self, info: QuasiNewtonStepInfo[FirstOrderOracle[FirstOrderFunctionProto]]
     ) -> Matrix:
@@ -104,6 +108,7 @@ class BFGSUpdate(
 
     StepInfoClass = QuasiNewtonStepInfo[FirstOrderOracle[FirstOrderFunctionProto]]
 
+    @override
     def hess_inv(
         self, info: QuasiNewtonStepInfo[FirstOrderOracle[FirstOrderFunctionProto]]
     ) -> Matrix:

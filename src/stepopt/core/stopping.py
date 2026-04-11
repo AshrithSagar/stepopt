@@ -6,6 +6,8 @@ src/stepopt/core/stopping.py
 
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from dataclasses import dataclass
+from typing import override
 
 import numpy as np
 
@@ -20,7 +22,7 @@ from stepopt.types import Scalar
 from stepopt.utils.logging import logger
 
 type StoppingCriterionType[S: StepInfo[Oracle[FunctionProto]]] = (
-    "StoppingCriterion[S]" | "CompositeCriterion[S]" | Iterable["StoppingCriterion[S]"]
+    StoppingCriterion[S] | CompositeCriterion[S] | Iterable[StoppingCriterion[S]]
 )
 """Generic type alias for stopping criteria."""
 
@@ -45,25 +47,28 @@ class StoppingCriterion[S: StepInfo[Oracle[FunctionProto]]](ABC):
         """
         raise NotImplementedError
 
+    @override
     def __str__(self) -> str:
         name = self.__class__.__name__
         params = self.__dict__ if self.__dict__ else ""
         return f"{name}({params})"
 
 
+@dataclass
 class CompositeCriterion[S: StepInfo[Oracle[FunctionProto]]](StoppingCriterion[S]):
     """
     Combines multiple stopping criteria. Stops when any one of the criteria is met.
     """
 
-    def __init__(self, criteria: Iterable[StoppingCriterion[S]]) -> None:
-        self.criteria = criteria
-        """Iterable of stopping criteria."""
+    criteria: Iterable[StoppingCriterion[S]]
+    """Iterable of stopping criteria."""
 
+    @override
     def reset(self) -> None:
         for criterion in self.criteria:
             criterion.reset()
 
+    @override
     def check(self, info: S) -> bool:
         logger.debug(
             f"Checking stopping criteria for {info.__class__.__name__}(k={info.k})"
@@ -71,6 +76,7 @@ class CompositeCriterion[S: StepInfo[Oracle[FunctionProto]]](StoppingCriterion[S
         return any(criterion.check(info) for criterion in self.criteria)
 
 
+@dataclass
 class MaxIterationsCriterion[S: StepInfo[Oracle[FunctionProto]]](StoppingCriterion[S]):
     """
     Stops when the maximum number of iterations is reached.
@@ -78,14 +84,15 @@ class MaxIterationsCriterion[S: StepInfo[Oracle[FunctionProto]]](StoppingCriteri
     `k >= maxiter`
     """
 
-    def __init__(self, maxiter: int = 1000) -> None:
-        self.maxiter = int(maxiter)
-        """Maximum number of iterations."""
+    maxiter: int = 1000
+    """Maximum number of iterations."""
 
+    @override
     def check(self, info: S) -> bool:
         return bool(info.k >= self.maxiter)
 
 
+@dataclass
 class GradientNormCriterion[
     S: FirstOrderStepInfo[FirstOrderOracle[FirstOrderFunctionProto]]
 ](StoppingCriterion[S]):
@@ -95,14 +102,15 @@ class GradientNormCriterion[
     `||f'(x_k)|| < tol`
     """
 
-    def __init__(self, tol: Scalar = 1e-6) -> None:
-        self.tol = Scalar(tol)
-        """Tolerance for the gradient norm."""
+    tol: Scalar = 1e-6
+    """Tolerance for the gradient norm."""
 
+    @override
     def check(self, info: S) -> bool:
         return bool(np.linalg.norm(info.dfx) < self.tol)
 
 
+@dataclass
 class FunctionValueCriterion[
     S: ZeroOrderStepInfo[ZeroOrderOracle[ZeroOrderFunctionProto]]
 ](StoppingCriterion[S]):
@@ -112,9 +120,9 @@ class FunctionValueCriterion[
     `f(x_k) < tol`
     """
 
-    def __init__(self, tol: Scalar = 1e-6) -> None:
-        self.tol = Scalar(tol)
-        """Tolerance for the function value."""
+    tol: Scalar = 1e-6
+    """Tolerance for the function value."""
 
+    @override
     def check(self, info: S) -> bool:
         return bool(info.fx < self.tol)

@@ -4,7 +4,7 @@ Oracle utils
 src/stepopt/core/oracle.py
 """
 
-from typing import Generic, Self, TypeVar
+from typing import Generic, Self, TypeVar, override
 
 from stepopt.functions.protocol import (
     FirstOrderFunctionProto,
@@ -24,7 +24,7 @@ class Oracle(Generic[FunctionProtoT_co]):
     """A base class for oracles."""
 
     def __init__(self, func: FunctionProtoT_co) -> None:
-        self.func = func
+        self.func: FunctionProtoT_co = func
         """The objective function `f(x)`."""
 
         self.dim: int = func.dim
@@ -46,6 +46,8 @@ class Oracle(Generic[FunctionProtoT_co]):
 class ZeroOrderOracle(Oracle[ZeroOrderFunctionProtoT_co]):
     """`f = oracle(x)`"""
 
+    call_count: int
+
     def __init__(self, func: ZeroOrderFunctionProtoT_co) -> None:
         super().__init__(func)
 
@@ -57,6 +59,7 @@ class ZeroOrderOracle(Oracle[ZeroOrderFunctionProtoT_co]):
         self.eval_call_count += 1
         return self.func.eval(x)
 
+    @override
     def reset(self) -> Self:
         self.eval_call_count = 0
         return super().reset()
@@ -64,6 +67,8 @@ class ZeroOrderOracle(Oracle[ZeroOrderFunctionProtoT_co]):
 
 class FirstOrderOracle(ZeroOrderOracle[FirstOrderFunctionProtoT_co]):
     """`f(x), f'(x) = oracle(x)`"""
+
+    call_count: int
 
     def __init__(self, func: FirstOrderFunctionProtoT_co) -> None:
         super().__init__(func)
@@ -75,6 +80,7 @@ class FirstOrderOracle(ZeroOrderOracle[FirstOrderFunctionProtoT_co]):
         self.grad_call_count += 1
         return self.func.grad(x)
 
+    @override
     def reset(self) -> Self:
         self.grad_call_count = 0
         return super().reset()
@@ -82,6 +88,8 @@ class FirstOrderOracle(ZeroOrderOracle[FirstOrderFunctionProtoT_co]):
 
 class SecondOrderOracle(FirstOrderOracle[SecondOrderFunctionProtoT_co]):
     """`f(x), f'(x), f''(x) = oracle(x)`"""
+
+    call_count: int
 
     def __init__(self, func: SecondOrderFunctionProtoT_co) -> None:
         super().__init__(func)
@@ -93,6 +101,7 @@ class SecondOrderOracle(FirstOrderOracle[SecondOrderFunctionProtoT_co]):
         self.hess_call_count += 1
         return self.func.hess(x)
 
+    @override
     def reset(self) -> Self:
         self.hess_call_count = 0
         return super().reset()

@@ -6,6 +6,7 @@ src/stepopt/utils/logging.py
 
 import logging
 import os
+from typing import ClassVar
 
 from rich.console import Console
 from rich.logging import RichHandler
@@ -24,7 +25,7 @@ class Logger:
     ```
     """
 
-    _configured: set[str] = set()
+    _configured: ClassVar[set[str]] = set()
 
     @classmethod
     def configure(
@@ -74,9 +75,10 @@ class Logger:
         Return the `stdlib.Logger` for `name`.
         If `ensure_configured=True`, will call `configure()` with default settings when logger is not yet configured.
         """
-        logger = logging.getLogger(name)
         if ensure_configured and name not in cls._configured:
-            cls.configure(name=name)
+            logger = cls.configure(name=name)
+        else:
+            logger = logging.getLogger(name)
         return logger
 
 

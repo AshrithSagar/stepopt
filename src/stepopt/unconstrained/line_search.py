@@ -5,7 +5,7 @@ src/stepopt/unconstrained/line_search.py
 """
 
 from abc import ABC
-from typing import Any, Self
+from typing import Any, Self, override
 
 import numpy as np
 
@@ -50,15 +50,17 @@ class ArmijoMixin[
 
         self.c = Scalar(c)
         """Armijo parameter"""
-        self.alpha_min = Scalar(alpha_min)
-        self.alpha_start = Scalar(alpha_start)
-        self.alpha_step = Scalar(alpha_step)
-        self.alpha_stop = Scalar(alpha_stop)
+        self.alpha_min: Scalar = Scalar(alpha_min)
+        self.alpha_start: Scalar = Scalar(alpha_start)
+        self.alpha_step: Scalar = Scalar(alpha_step)
+        self.alpha_stop: Scalar = Scalar(alpha_stop)
 
+    @override
     def reset(self) -> Self:
         assert 0 < self.c < 1, "c must be in (0, 1)"
         return super().reset()
 
+    @override
     def step_length(self, info: S) -> Scalar:
         d = info.ensure(info.direction)
         f = info.fx
@@ -115,19 +117,21 @@ class BacktrackingMixin[
             **kwargs,
         )
 
-        self.c = Scalar(c)
+        self.c: Scalar = Scalar(c)
         """Armijo parameter"""
-        self.beta = Scalar(beta)
+        self.beta: Scalar = Scalar(beta)
         """Step length reduction factor"""
-        self.alpha_init = Scalar(alpha_init)
-        self.alpha_min = Scalar(alpha_min)
-        self.alpha_max = Scalar(alpha_max)
-        self.maxiter = int(maxiter)
+        self.alpha_init: Scalar = Scalar(alpha_init)
+        self.alpha_min: Scalar = Scalar(alpha_min)
+        self.alpha_max: Scalar = Scalar(alpha_max)
+        self.maxiter: int = int(maxiter)
 
+    @override
     def reset(self) -> Self:
         assert 0 < self.c < 1, "c must be in (0, 1)"
         return super().reset()
 
+    @override
     def step_length(self, info: S) -> Scalar:
         d = info.ensure(info.direction)
         f = info.fx
@@ -178,19 +182,21 @@ class ArmijoGoldsteinMixin[
             **kwargs,
         )
 
-        self.c = Scalar(c)
+        self.c: Scalar = Scalar(c)
         """Armijo-Goldstein parameter"""
-        self.beta = Scalar(beta)
+        self.beta: Scalar = Scalar(beta)
         """Step length reduction factor"""
-        self.alpha_init = Scalar(alpha_init)
-        self.alpha_min = Scalar(alpha_min)
-        self.alpha_max = Scalar(alpha_max)
-        self.maxiter = int(maxiter)
+        self.alpha_init: Scalar = Scalar(alpha_init)
+        self.alpha_min: Scalar = Scalar(alpha_min)
+        self.alpha_max: Scalar = Scalar(alpha_max)
+        self.maxiter: int = int(maxiter)
 
+    @override
     def reset(self) -> Self:
         assert 0 < self.c < 0.5, "c must be in (0, 0.5)"
         return super().reset()
 
+    @override
     def step_length(self, info: S) -> Scalar:
         d = info.ensure(info.direction)
         f = info.fx
@@ -273,21 +279,23 @@ class StrongWolfeMixin[
             **kwargs,
         )
 
-        self.c1 = Scalar(c1)
+        self.c1: Scalar = Scalar(c1)
         """Armijo parameter"""
-        self.c2 = Scalar(c2)
+        self.c2: Scalar = Scalar(c2)
         """Curvature parameter"""
-        self.beta = Scalar(beta)
+        self.beta: Scalar = Scalar(beta)
         """Step length reduction factor"""
-        self.alpha_init = Scalar(alpha_init)
-        self.alpha_min = Scalar(alpha_min)
-        self.alpha_max = Scalar(alpha_max)
-        self.maxiter = int(maxiter)
+        self.alpha_init: Scalar = Scalar(alpha_init)
+        self.alpha_min: Scalar = Scalar(alpha_min)
+        self.alpha_max: Scalar = Scalar(alpha_max)
+        self.maxiter: int = int(maxiter)
 
+    @override
     def reset(self) -> Self:
         assert 0 < self.c1 < self.c2 < 1, "0 < c1 < c2 < 1 must be satisfied"
         return super().reset()
 
+    @override
     def step_length(self, info: S) -> Scalar:
         d = info.ensure(info.direction)
         f = info.fx
@@ -380,9 +388,10 @@ class GradientDescent(
 
     def __init__(self, lr: Scalar = 1e-3, **kwargs: Any) -> None:
         super().__init__(lr=lr, **kwargs)
-        self.lr = Scalar(lr)
+        self.lr: Scalar = Scalar(lr)
         """Learning rate (step length)"""
 
+    @override
     def step_length(
         self,
         info: FirstOrderLineSearchStepInfo[FirstOrderOracle[FirstOrderFunctionProto]],

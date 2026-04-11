@@ -7,7 +7,7 @@ src/stepopt/core/info.py
 import inspect
 from dataclasses import dataclass, fields
 from functools import cached_property
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, override
 
 from stepopt.core.oracle import (
     FirstOrderOracle,
@@ -40,7 +40,7 @@ class StepInfo(Generic[OracleT_co]):
     x: Vector
     """The current point `x_k` in the input space."""
 
-    oracle: OracleT_co  # type: ignore[misc]
+    oracle: OracleT_co
     """The oracle function used to evaluate `f`."""
 
     def to_str(self, spacing: str | int = 2, prefix: str | int = 0) -> str:
@@ -57,9 +57,11 @@ class StepInfo(Generic[OracleT_co]):
             repr.append(f"{f.name}={format_value(value, sep=', ', pfx=pfx)}")
         return f"{p}{name}(\n{p}{s}" + f",\n{p}{s}".join(repr) + f"\n{p})"
 
+    @override
     def __str__(self) -> str:
         return self.to_str()
 
+    @override
     def __format__(self, spec: str) -> str:
         if spec.isdigit():
             return self.to_str(spacing=int(spec))
@@ -271,9 +273,11 @@ class RunInfo[S: StepInfo[Oracle[FunctionProto]]]:
             + f"{',\n'.join(step.to_str(prefix=spacing * 2, spacing=spacing) for step in self.history)}\n{s}]\n)"
         )
 
+    @override
     def __str__(self) -> str:
         return self.to_str()
 
+    @override
     def __format__(self, spec: str) -> str:
         if spec.isdigit():
             return self.to_str(spacing=int(spec))

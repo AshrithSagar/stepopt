@@ -7,6 +7,7 @@ Base class for real-valued scalar mathematical functions
 """
 
 from abc import ABC, abstractmethod
+from typing import override
 
 import numpy as np
 
@@ -52,16 +53,19 @@ class LinearFunction(Function):
     """A linear function of the form `f(x) = c^T x`"""
 
     def __init__(self, dim: int, c: Vector) -> None:
-        self.c = Vector(c)
+        self.c: Vector = Vector(c)
         assert self.c.shape == (dim,), "c must be of shape (dim,)."
         super().__init__(dim=dim)
 
+    @override
     def eval(self, x: Vector) -> Scalar:
         return Scalar(self.c.T @ x)
 
+    @override
     def grad(self, x: Vector) -> Vector:
         return self.c
 
+    @override
     def hess(self, x: Vector) -> Matrix:
         return Matrix(np.zeros((self.dim, self.dim), dtype=dtype))
 
@@ -70,8 +74,8 @@ class ConvexQuadratic(Function):
     """A convex quadratic function of the form `f(x) = 0.5 * x^T Q x + h^T x`"""
 
     def __init__(self, dim: int, Q: Matrix, h: Vector) -> None:
-        self.Q = Matrix(Q)
-        self.h = Vector(h)
+        self.Q: Matrix = Matrix(Q)
+        self.h: Vector = Vector(h)
         assert self.Q.shape == (dim, dim), "Q must be of shape (dim, dim)."
         assert self.h.shape == (dim,), "h must be of shape (dim,)."
 
@@ -82,14 +86,18 @@ class ConvexQuadratic(Function):
         super().__init__(dim=dim)
 
     @property
+    @override
     def x_star(self) -> Vector:
         return Vector(np.linalg.solve(self.Q, -self.h))
 
+    @override
     def eval(self, x: Vector) -> Scalar:
         return Scalar(0.5 * x.T @ self.Q @ x + self.h.T @ x)
 
+    @override
     def grad(self, x: Vector) -> Vector:
         return Vector(self.Q @ x + self.h)
 
+    @override
     def hess(self, x: Vector) -> Matrix:
         return self.Q

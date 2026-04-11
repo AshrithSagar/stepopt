@@ -5,7 +5,7 @@ src/stepopt/constrained/optimisers.py
 """
 
 from abc import ABC
-from typing import Any
+from typing import Any, override
 
 import numpy as np
 
@@ -95,6 +95,7 @@ class ActiveSetMethod(
         super().__init__(**kwargs)
 
     @property
+    @override
     def stopping(
         self,
     ) -> list[
@@ -109,6 +110,7 @@ class ActiveSetMethod(
             `mu_i >= 0 for all i in W_k`
             """
 
+            @override
             def check(
                 self, info: ActiveSetStepInfo[FirstOrderOracle[ConvexQuadratic]]
             ) -> bool:
@@ -134,6 +136,7 @@ class ActiveSetMethod(
 
         return super().stopping + [ActiveSetStoppingCriterion()]
 
+    @override
     def direction(
         self, info: ActiveSetStepInfo[FirstOrderOracle[ConvexQuadratic]]
     ) -> Vector:
@@ -147,7 +150,7 @@ class ActiveSetMethod(
         dim: int = Q.shape[0]
         objective = ConvexQuadratic(dim=dim, Q=Q, h=h)
 
-        W = info.ensure(info.W, fallback=[])
+        W: list[int] = info.ensure(info.W, fallback=[])
         A: Matrix = self.problem.constraint.A
         if len(W) == 0:  # No active constraints
             A_eq = Matrix(np.zeros((0, A.shape[1]), dtype=dtype))
@@ -170,6 +173,7 @@ class ActiveSetMethod(
                 info.relax = W[idx]
         return v
 
+    @override
     def step_length(
         self, info: ActiveSetStepInfo[FirstOrderOracle[ConvexQuadratic]]
     ) -> Scalar:
@@ -201,6 +205,7 @@ class ActiveSetMethod(
         info.W = W
         return alpha
 
+    @override
     def step(
         self, info: ActiveSetStepInfo[FirstOrderOracle[ConvexQuadratic]]
     ) -> ActiveSetStepInfo[FirstOrderOracle[ConvexQuadratic]]:

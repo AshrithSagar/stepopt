@@ -9,7 +9,7 @@ Do not use this in production; prefer numpy instead.
 """
 
 from collections.abc import Iterable
-from typing import Any, Generic, SupportsFloat, TypeAlias, TypeVar, cast
+from typing import Any, Generic, SupportsFloat, TypeAlias, TypeVar, cast, override
 
 _ShapeT_co = TypeVar(
     "_ShapeT_co", bound=tuple[int, ...], default=tuple[int, ...], covariant=True
@@ -40,9 +40,11 @@ class PyNDArray(Generic[_ShapeT_co, _DTypeT_co]):
     def __getitem__(self, index: int | slice) -> Any:
         raise NotImplementedError
 
+    @override
     def __str__(self) -> str:
         return f"array({self.array})"
 
+    @override
     def __repr__(self) -> str:
         return f"PyNDArray(shape={self.shape}, dtype={self.dtype}, array={self.array})"
 
@@ -78,7 +80,7 @@ class PyNDArray(Generic[_ShapeT_co, _DTypeT_co]):
             if len(dtypes) == 1:
                 return dtypes.pop()
             raise TypeError("All elements must have the same type")
-            return object  # Fallback
+            # return object  # Fallback
         else:
             return type(x)
 

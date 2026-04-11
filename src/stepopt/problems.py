@@ -25,8 +25,8 @@ class AbstractProblem[F: FunctionProto, O: Oracle[Any]]:
     """A base class for optimisation problems."""
 
     def __init__(self, objective: F, oracle: type[O]) -> None:
-        self.objective = objective
-        self.oracle = oracle(objective)
+        self.objective: F = objective
+        self.oracle: O = oracle(objective)
 
 
 class UnconstrainedProblem[F: FunctionProto, O: Oracle[Any]](AbstractProblem[F, O]):
@@ -53,7 +53,7 @@ class ConstrainedProblem[F: FunctionProto, O: Oracle[Any], C: AbstractConstraint
 
     def __init__(self, objective: F, oracle: type[O], constraint: C) -> None:
         super().__init__(objective, oracle)
-        self.constraint = constraint
+        self.constraint: C = constraint
 
 
 class LinearProgram[O: Oracle[Any], C: LinearConstraintSet[Any]](

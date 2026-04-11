@@ -2,6 +2,8 @@
 tests/test_convex_quadratic.py
 """
 
+from typing import Any
+
 import numpy as np
 
 from stepopt.core.oracle import FirstOrderOracle
@@ -27,7 +29,7 @@ def test_convex_quadratic() -> None:
     oracle = FirstOrderOracle(func)
     optimiser = ConjugateGradientMethod()
     x0 = Vector(np.zeros(dim))
-    criteria: StoppingCriterionType = [
+    criteria: StoppingCriterionType[Any] = [
         MaxIterationsCriterion(maxiter=int(1e2)),
         GradientNormCriterion(tol=1e-6),
     ]
