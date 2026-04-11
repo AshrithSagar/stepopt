@@ -5,7 +5,12 @@ description = "Optimisation algorithms"
 authors = [{ name = "Ashrith Sagar", email = "ashrithy@iisc.ac.in" }]
 readme = "./README.md"
 requires-python = ">=3.14"
-dependencies = ["matplotlib>=3.10.8", "numpy>=2.4.4", "rich>=14.3.3"]
+dependencies = [
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.4",
+    "rich>=14.3.4",
+    "typingkit",
+]
 
 [build-system]
 requires = ["uv_build>=0.11.6,<0.12.0"]
@@ -24,3 +29,6 @@ typecheck = [
     "ty>=0.0.29",
     "zuban>=0.7.0",
 ]
+
+[tool.uv.sources]
+typingkit = { git = "https://github.com/AshrithSagar/typingkit.git", rev = "main" }
