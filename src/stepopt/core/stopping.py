@@ -5,7 +5,7 @@ src/stepopt/core/stopping.py
 """
 
 from abc import ABC, abstractmethod
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 import numpy as np
 
@@ -19,9 +19,9 @@ from stepopt.functions.protocol import (
 from stepopt.types import Scalar
 from stepopt.utils.logging import logger
 
-type StoppingCriterionType[S: StepInfo[Oracle[FunctionProto]]] = Union[
-    "StoppingCriterion[S]", "CompositeCriterion[S]", Iterable["StoppingCriterion[S]"]
-]
+type StoppingCriterionType[S: StepInfo[Oracle[FunctionProto]]] = (
+    "StoppingCriterion[S]" | "CompositeCriterion[S]" | Iterable["StoppingCriterion[S]"]
+)
 """Generic type alias for stopping criteria."""
 
 

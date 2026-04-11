@@ -4,7 +4,7 @@ Problem classes
 src/stepopt/problems.py
 """
 
-from typing import Any, Optional
+from typing import Any
 
 from stepopt.constrained.constraint import (
     AbstractConstraint,
@@ -36,7 +36,7 @@ class UnconstrainedProblem[F: FunctionProto, O: Oracle[Any]](AbstractProblem[F, 
         self,
         method: IterativeOptimiser[S],
         x0: Vector,
-        criteria: Optional[StoppingCriterionType[S]] = None,
+        criteria: StoppingCriterionType[S] | None = None,
         show_params: bool = True,
     ) -> RunInfo[S]:
         """Solve the unconstrained optimisation problem."""

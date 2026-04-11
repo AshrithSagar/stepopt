@@ -4,7 +4,7 @@ Formatting utils
 src/stepopt/utils/format.py
 """
 
-from typing import Sequence
+from collections.abc import Sequence
 
 import numpy as np
 from rich.console import Console

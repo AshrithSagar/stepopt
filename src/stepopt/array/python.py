@@ -8,7 +8,8 @@ This is just an experiment to implement numpy-like arrays in pure Python for edu
 Do not use this in production; prefer numpy instead.
 """
 
-from typing import Any, Generic, Iterable, SupportsFloat, TypeAlias, TypeVar, cast
+from collections.abc import Iterable
+from typing import Any, Generic, SupportsFloat, TypeAlias, TypeVar, cast
 
 _ShapeT_co = TypeVar(
     "_ShapeT_co", bound=tuple[int, ...], default=tuple[int, ...], covariant=True

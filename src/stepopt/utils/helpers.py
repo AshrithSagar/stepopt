@@ -4,7 +4,7 @@ Helpers
 src/stepopt/utils/helpers.py
 """
 
-from typing import Any, Optional, Type
+from typing import Any
 
 from stepopt.constrained.constraint import AbstractConstraint
 from stepopt.core.base import IterativeOptimiser
@@ -18,13 +18,13 @@ from stepopt.types import Vector
 
 def optimise[F: ZeroOrderFunctionProto](
     objective: F,
-    oracle: Type[Oracle[F]],
+    oracle: type[Oracle[F]],
     method: IterativeOptimiser[StepInfo[Oracle[F]]],
     x0: Vector,
-    constaint: Optional[AbstractConstraint[Any]] = None,
-    criteria: Optional[StoppingCriterionType[StepInfo[Oracle[F]]]] = None,
+    constaint: AbstractConstraint[Any] | None = None,
+    criteria: StoppingCriterionType[StepInfo[Oracle[F]]] | None = None,
     show_params: bool = True,
-) -> Optional[RunInfo[StepInfo[Oracle[F]]]]:
+) -> RunInfo[StepInfo[Oracle[F]]] | None:
     if constaint is None:
         problem = UnconstrainedProblem(objective, oracle)
         info = problem.solve(method, x0, criteria, show_params)

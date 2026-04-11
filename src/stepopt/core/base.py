@@ -11,7 +11,8 @@ References
 import logging
 import time
 from abc import ABC, abstractmethod
-from typing import Any, Iterable, Optional, Self
+from collections.abc import Iterable
+from typing import Any, Self
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -108,7 +109,7 @@ class IterativeOptimiser[S: StepInfo[Oracle[ZeroOrderFunctionProto]]](ABC):
         self,
         oracle_fn: Oracle[ZeroOrderFunctionProto],
         x0: Vector,
-        criteria: Optional[StoppingCriterionType[S]] = None,
+        criteria: StoppingCriterionType[S] | None = None,
         show_params: bool = True,
     ) -> RunInfo[S]:
         """
@@ -353,8 +354,8 @@ class ZeroOrderLineSearchOptimiser[
         self,
         info: S,
         alpha: Scalar,
-        x: Optional[Vector] = None,
-        direction: Optional[Vector] = None,
+        x: Vector | None = None,
+        direction: Vector | None = None,
     ) -> Scalar:
         """`phi(alpha) = f(x + alpha * d)`"""
         x = info.ensure(x if x is not None else info.x)
@@ -369,8 +370,8 @@ class FirstOrderLineSearchOptimiser[
         self,
         info: S,
         alpha: Scalar,
-        x: Optional[Vector] = None,
-        direction: Optional[Vector] = None,
+        x: Vector | None = None,
+        direction: Vector | None = None,
     ) -> Scalar:
         """`phi'(alpha) = f'(x + alpha * d)^T d`"""
         x = info.ensure(x if x is not None else info.x)

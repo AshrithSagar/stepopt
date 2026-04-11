@@ -9,8 +9,9 @@ References
 """
 
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
 from enum import Enum, auto
-from typing import Any, Callable, Literal, Optional, Sequence
+from typing import Any, Callable, Literal
 
 import numpy as np
 
@@ -246,7 +247,7 @@ class LinearEqualityConstraintSet(
 
     def __init__(self, A: Matrix, b: Vector) -> None:
         super().__init__(A, b)
-        self._AT_AAT_pinv: Optional[Matrix] = None
+        self._AT_AAT_pinv: Matrix | None = None
 
     def project(self, x: Vector) -> Vector:
         residual = self.residual(x)

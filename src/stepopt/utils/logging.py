@@ -6,7 +6,6 @@ src/stepopt/utils/logging.py
 
 import logging
 import os
-from typing import Optional, Union
 
 from rich.console import Console
 from rich.logging import RichHandler
@@ -30,7 +29,7 @@ class Logger:
     @classmethod
     def configure(
         cls,
-        level: Optional[Union[str, int]] = None,
+        level: str | int | None = None,
         name: str = "stepopt",
         force: bool = False,
     ) -> logging.Logger:

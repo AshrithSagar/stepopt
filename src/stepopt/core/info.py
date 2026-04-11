@@ -7,7 +7,7 @@ src/stepopt/core/info.py
 import inspect
 from dataclasses import dataclass, fields
 from functools import cached_property
-from typing import Generic, Optional, TypeVar
+from typing import Generic, TypeVar
 
 from stepopt.core.oracle import (
     FirstOrderOracle,
@@ -67,21 +67,21 @@ class StepInfo(Generic[OracleT_co]):
 
     def ensure[A](
         self,
-        attr: Optional[A],
-        fallback: Optional[A] = None,
-        message: Optional[str] = None,
+        attr: A | None,
+        fallback: A | None = None,
+        message: str | None = None,
     ) -> A:
         """
         Ensure that the attribute of type `A` is not `None`.
 
         Parameters
         ----------
-        attr : Optional[A]
+        attr : A | None
             The attribute to check.
-        fallback : Optional[A], optional
+        fallback : A | None, optional
             The fallback value to return if `attr` is `None`.
             Defaults to `None`, in which case an error is raised.
-        message : Optional[str], optional
+        message : str | None, optional
             The message to raise in the ValueError if `attr` is `None` and no fallback is provided.
             Defaults to `None`, in which case a generic message is used.
         """
@@ -161,8 +161,8 @@ class SecondOrderStepInfo(
 
 @dataclass
 class LineSearchStepInfo(StepInfo[OracleT_co], Generic[OracleT_co]):
-    direction: Optional[Vector] = None
-    alpha: Optional[Scalar] = None
+    direction: Vector | None = None
+    alpha: Scalar | None = None
 
 
 @dataclass
@@ -196,17 +196,17 @@ class SecondOrderLineSearchStepInfo(
 class QuasiNewtonStepInfo(
     FirstOrderLineSearchStepInfo[FirstOrderOracleT_co], Generic[FirstOrderOracleT_co]
 ):
-    H: Optional[Matrix] = None
+    H: Matrix | None = None
     """Approximate inverse Hessian matrix at iteration `k`."""
 
-    s: Optional[Vector] = None
+    s: Vector | None = None
     """
     Step taken after the previous iteration, i.e., iteration `k-1`.
 
     `s_k = x_k - x_{k-1}`
     """
 
-    y: Optional[Vector] = None
+    y: Vector | None = None
     """
     Gradient difference after the previous iteration, i.e., iteration `k-1`.
 
@@ -218,16 +218,16 @@ class QuasiNewtonStepInfo(
 class ActiveSetStepInfo(
     FirstOrderLineSearchStepInfo[FirstOrderOracleT_co], Generic[FirstOrderOracleT_co]
 ):
-    W: Optional[list[int]] = None
+    W: list[int] | None = None
     """Indices of the active constraints at iteration `k`."""
 
-    mu: Optional[Vector] = None
+    mu: Vector | None = None
     """The Lagrange multipliers associated with the active constraints at iteration `k`."""
 
-    blocking: Optional[int] = None
+    blocking: int | None = None
     """Index of the blocking constraint, if any."""
 
-    relax: Optional[int] = None
+    relax: int | None = None
     """Index of the constraint relaxed, if any."""
 
 
