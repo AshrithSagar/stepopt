@@ -20,7 +20,7 @@ build-backend = "uv_build"
 dev = ["pytest>=9.0.3", "pytest-memray>=1.8.0"]
 extra = ["cvxpy>=1.8.2", "scipy>=1.17.1", "scipy-stubs>=1.17.1.4"]
 notebook = ["jupyter>=1.1.1"]
-lint = ["ruff>=0.15.12"]
+lint = ["ruff>=0.15.13"]
 typecheck = [
     "basedpyright>=1.39.4",
     "mypy[mypyc]>=2.1.0",
