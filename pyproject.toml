@@ -7,13 +7,13 @@ readme = "./README.md"
 requires-python = ">=3.14"
 dependencies = [
     "matplotlib>=3.10.9",
-    "numpy>=2.4.4",
+    "numpy>=2.4.5",
     "rich>=15.0.0",
     "typingkit",
 ]
 
 [build-system]
-requires = ["uv_build>=0.11.13,<0.12.0"]
+requires = ["uv_build>=0.11.14,<0.12.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
@@ -27,7 +27,7 @@ typecheck = [
     "pycroscope>=0.4.0",
     "pyrefly>=1.0.0",
     "pyright>=1.1.409",
-    "ty>=0.0.35",
+    "ty>=0.0.37",
     "zuban>=0.7.2",
 ]
 
